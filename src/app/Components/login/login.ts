@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 //Importaciones
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; //Para las redirecciones a otras paginas
+import { Router } from '@angular/router';
 import { Login } from '../../Interfaces/login';
 import { UsuarioService } from '../../Services/usuario';
 import { UtilidadService } from '../../Reutilizable/utilidad';
@@ -44,7 +44,7 @@ export class LoginComponent {
   }
   
   iniciarSesion(){
-    this.mostrarLoading = true; //Muestra el loading
+    this.mostrarLoading = true;
     const request: Login = {
       correo: this.formularioLogin.value.email,
       clave: this.formularioLogin.value.password
@@ -59,7 +59,7 @@ export class LoginComponent {
       }
     },
     complete: () => {
-      this.mostrarLoading = false; //Oculta el loading
+      this.mostrarLoading = false;
     },
     error: (e) => {
         this._utilidadServicio.mostrarAlerta("Hubo un error", "Oops!");
