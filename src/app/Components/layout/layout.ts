@@ -11,15 +11,11 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from '@angular/material/list';
 
-//TODO: Acá deberían estar declaradas las páginas creadas en Pages, si llega a dar problemas hay que resolver esto
 
-//Importaciónes
 import { Router } from '@angular/router';
 
-//Interfaces
 import { Menu } from '../../Interfaces/menu';
 
-//Servicios
 import { MenuService } from '../../Services/menu';
 import { UtilidadService } from '../../Reutilizable/utilidad';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -43,20 +39,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class LayoutComponent implements OnInit {
 
-  //Variables
   listaMenus: Menu [] = [];
   correoUsuario: string = "";
   rolUsuario: string = "";
 
   constructor(
-    //Inyecto las dependencias
     private router: Router,
     private _menuServicio: MenuService,
     private _utilidadServicio: UtilidadService
   ){}
 
   ngOnInit(): void {
-    //Obtener la información del usuario
     const usuario = this._utilidadServicio.obtenerSesionUsuario();
 
     if(usuario != null){
@@ -72,7 +65,6 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  //Método para poder cerrar sesión
   cerrarSesion(){
     this._utilidadServicio.eliminarSesionUsuario();
     this.router.navigate(['login']);
