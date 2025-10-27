@@ -1,9 +1,7 @@
 import { Component, Inject } from '@angular/core';
 
-// Formularios
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-// Material
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,11 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 
-// Angular
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-// Interfaces / Servicios / Utilidades
 import { Usuario } from '../../../../Interfaces/usuario';
 import { RolService } from '../../../../Services/rol';
 import { UsuarioService } from '../../../../Services/usuario';
@@ -50,14 +46,12 @@ export class ModalUsuarioComponent {
     private modalActual: MatDialogRef<ModalUsuarioComponent>,
     @Inject(MAT_DIALOG_DATA) public datosUsuario: Usuario,
     private fb: FormBuilder,
-    //Inyeccion de servicios
     @Inject(RolService) private _rolServicio: RolService,
     private _usuarioServicio: UsuarioService,
     private _utilidadServicio: UtilidadService
 
   ){
 
-    //Campos del formulario
     this.formularioUsuario = this.fb.group({
       nombreCompleto : ["", Validators.required],
       correo : ["", Validators.required],
@@ -66,13 +60,11 @@ export class ModalUsuarioComponent {
       esActivo : ["1", Validators.required],
   });
 
-  //Si tenemos informacion
   if(this.datosUsuario != null){
     this.tituloAccion = "Editar";
     this.botonAccion = "Actualizar";
   }
 
-  //Obtener la lista de roles para pintar en el desplegable
   this._rolServicio.lista().subscribe({
     next: (data) => {
       if(data.status) this.listaRoles = data.value;
@@ -84,10 +76,8 @@ export class ModalUsuarioComponent {
 
 }
 
-//Este método se ejecuta cuando el componente esta iniciando o esta cargado
   ngOnInit(): void {
     if(this.datosUsuario != null){
-      //Información del formulario del usuario
       this.formularioUsuario.patchValue({
       nombreCompleto : this.datosUsuario.nombreCompleto,
       correo : this.datosUsuario.correo,
@@ -98,7 +88,6 @@ export class ModalUsuarioComponent {
     }
   }
 
-  //Método para poder crear o editar un usuario
   guardarEditar_Usuario(){
     const _usuario : Usuario = {
       idUsuario: this.datosUsuario == null ? 0 : this.datosUsuario.idUsuario,
@@ -110,14 +99,11 @@ export class ModalUsuarioComponent {
       esActivo: parseInt(this.formularioUsuario.value.esActivo)
     }
 
-      //Servicio para guardar o editar un usuario
     if(this.datosUsuario == null){
-      //Creamos un usuario
       this._usuarioServicio.guardar(_usuario).subscribe({
         next: (data) => {
           if(data.status){
             this._utilidadServicio.mostrarAlerta("Usuario registrado con éxito", "Exito");
-            //Después de creado el usuario, se cerrará el modal
             this.modalActual.close("true");
           }else{
             this._utilidadServicio.mostrarAlerta("No se pudo registrar el usuario", "Error");
@@ -133,7 +119,6 @@ export class ModalUsuarioComponent {
         next: (data) => {
           if(data.status){
             this._utilidadServicio.mostrarAlerta("El usuario fue editado", "Exito");
-            //Después de creado el usuario, se cerrará el modal
             this.modalActual.close("true");
           }else{
             this._utilidadServicio.mostrarAlerta("No se pudo editar el usuario", "Error");
