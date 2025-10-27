@@ -1,12 +1,9 @@
-// src/app/Components/layout/Pages/usuario/usuario.ts
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule, NgForOf } from '@angular/common';
 
-// Formularios
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
-// Material & CDK
 import { MatCardModule, MatCardContent } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -16,17 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 
-// Servicios / componentes
 import { ProductoService } from '../../../../Services/producto';
 import { VentaService } from '../../../../Services/venta';
 import { UtilidadService } from '../../../../Reutilizable/utilidad';
 
-//Interfaces
 import { Producto } from '../../../../Interfaces/producto';
 import { Venta } from '../../../../Interfaces/venta';
 import { DetalleVenta } from '../../../../Interfaces/detalle-venta';
 
-// Utiles
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,23 +53,20 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 })
 export class VentaComponent implements OnInit {
 
-  listaProductos:Producto[] = []; //Almacenamos todos los productos registrados en esta variable
-  listaProductosFiltro:Producto[] = [];//Esta variable contendrá los filtros para el auto-comlpete
+  listaProductos:Producto[] = [];
+  listaProductosFiltro:Producto[] = [];
 
-  listaProductosParaVenta:DetalleVenta[] = []; //Lista de productos para la venta
+  listaProductosParaVenta:DetalleVenta[] = [];
   bloquearBotonRegistrar:boolean = false;
 
-  productoSeleccionado!:Producto; //El producto seleccionado temporalmente en la UI se guarda acá, y luego este pasará a listaProductosParaVenta
-  tipoDePagoPorDefecto: string = "Efectivo"; //Tarjeta o efectivo
+  productoSeleccionado!:Producto;
+  tipoDePagoPorDefecto: string = "Efectivo";
   totalPagar:number = 0;
 
-  //Ingresar el producto y la cantidad para realizar la venta
   formularioProductoVenta:FormGroup;
   columnasTabla:string[] = ["producto", "cantidad", "precio", "total", "accion"];
   datosDetalleVenta = new MatTableDataSource(this.listaProductosParaVenta);
 
-  //Método para poder realizar la búsqueda por el nombre del producto
-    //Recibimos una búsqueda de tipo any y devuelve un array de Producto
   retornarProductosPorFiltro(busqueda: any):Producto[]{
     const valorBuscado = typeof busqueda === "string" ? busqueda.toLowerCase() : busqueda.nombre.toLowerCase();
 
@@ -94,7 +85,6 @@ export class VentaComponent implements OnInit {
       cantidad : ["", Validators.required]
     });
 
-    //Obtener la lista de productos
   this._productoServicio.lista().subscribe({
     next: (data) => {
       if(data.status) {
@@ -114,19 +104,16 @@ export class VentaComponent implements OnInit {
   ngOnInit(): void {    
   }
 
-  //Evento para mostrar el producto seleccionado
   mostrarProducto(producto:Producto): string{
     return producto.nombre;
   }
 
-  //Evento para guardar temporalmente el producto seleccionado de la lista
   productoParaVenta(event: any){
     this.productoSeleccionado =  event.option.value;
   }
 
-  //Método para registrar el producto elegido dentro de la tabla para realizar la venta
   agregarProductoParaVenta(){
-    const _cantidad:number = this.formularioProductoVenta.value.cantidad; //Cantidad de los productos para la venta
+    const _cantidad:number = this.formularioProductoVenta.value.cantidad;
     const _precio:number = parseFloat(this.productoSeleccionado.precio);
     const _total:number = _cantidad * _precio;
     this.totalPagar = this.totalPagar + _total;
@@ -148,7 +135,6 @@ export class VentaComponent implements OnInit {
 
   }
 
-  //Método para eliminar un producto del listado
   eliminarProducto(detalle: DetalleVenta){
     this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto);
     this.listaProductosParaVenta = this.listaProductosParaVenta.filter(p => p.idProducto != detalle.idProducto);
@@ -156,11 +142,10 @@ export class VentaComponent implements OnInit {
     this.datosDetalleVenta = new MatTableDataSource(this.listaProductosParaVenta);
   }
 
-  //Método para poder registrar una venta
   registrarVenta(){
 
     if(this.listaProductosParaVenta.length > 0){
-      this.bloquearBotonRegistrar = true; //Si pulsa el botón de bloquear, inmediatamente se deshabilitará al presionar 1 vez
+      this.bloquearBotonRegistrar = true;
       const request: Venta = {
         tipoPago : this.tipoDePagoPorDefecto,
         totalTexto : String(this.totalPagar.toFixed(2)),
@@ -184,7 +169,7 @@ export class VentaComponent implements OnInit {
           }
         },
         complete:()=>{
-          this.bloquearBotonRegistrar = false; //Ya no va a estar bloqueado
+          this.bloquearBotonRegistrar = false;
         },
         error:(e)=>{
           // console.log(e);
