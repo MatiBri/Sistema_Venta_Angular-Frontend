@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 
-//Importaciones
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,7 +26,6 @@ import { DetalleVenta } from '../../../../Interfaces/detalle-venta';
 })
 export class ModalDetalleVenta implements OnInit {
 
-  //Variables
   fechaRegistro: string = "";
   numeroDocumento: string = "";
   tipoPago: string = "";
@@ -37,12 +35,11 @@ export class ModalDetalleVenta implements OnInit {
   
 
   constructor(
-    //Referencias para poder obtener los datos
     @Inject(MAT_DIALOG_DATA) public _venta: Venta
   )
   {
-    this.fechaRegistro = _venta.fechaRegistro!; //La propiedad no va a ser nulo
-    this.numeroDocumento = _venta.numeroDocumento!; //La propiedad no va a ser nulo
+    this.fechaRegistro = _venta.fechaRegistro!;
+    this.numeroDocumento = _venta.numeroDocumento!;
     this.tipoPago = _venta.tipoPago;
     this.total = _venta.totalTexto;
     this.detalleVenta = _venta.detalleVenta;
