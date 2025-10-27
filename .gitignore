@@ -1,0 +1,30 @@
+﻿# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log
+
+# Angular
+/.angular
+/dist
+/out-tsc
+/src/environments/environment*.ts
+
+# Editor, OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs and builds
+logs
+*.log
+coverage/
+.tmp/
+
+# Package managers
+package-lock.json
+yarn.lock
+
+# IDEs
+.idea/
+
