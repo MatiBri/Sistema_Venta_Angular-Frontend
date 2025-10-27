@@ -1,8 +1,6 @@
-// src/app/Components/layout/Pages/usuario/usuario.ts
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Material & CDK
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -11,13 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 
-// Servicios / componentes
 import { ModalUsuarioComponent } from '../../Modales/modal-usuario/modal-usuario';
 import { Usuario } from '../../../../Interfaces/usuario';
 import { UsuarioService } from '../../../../Services/usuario';
 import { UtilidadService } from '../../../../Reutilizable/utilidad';
 
-// Utiles
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -45,11 +41,10 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class UsuarioComponent implements OnInit, AfterViewInit {
 
-  //Variables de columnas para las tablas
   columnasTabla : string[] = ['nombreCompleto', 'correo', 'rolDescripcion', 'estado', 'acciones'];
-  dataInicio: Usuario[] = []; //Array que va a contener la información de los usuarios. Por defecto es un array vacío
-  dataListaUsuarios = new MatTableDataSource<Usuario>(this.dataInicio); //Fuente de datos para la tabla
-  @ViewChild(MatPaginator) paginacionTabla!: MatPaginator; //Variable para la paginación de la tabla. "!" omite valores nulos
+  dataInicio: Usuario[] = [];
+  dataListaUsuarios = new MatTableDataSource<Usuario>(this.dataInicio);
+  @ViewChild(MatPaginator) paginacionTabla!: MatPaginator;
 
   constructor(
     private dialog: MatDialog,
@@ -61,7 +56,7 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
     this._usuarioServicio.lista().subscribe({
     next: (data) => {
       if(data.status)
-        this.dataListaUsuarios.data = data.value; //Asignamos la información a la fuente de datos de la tabla
+        this.dataListaUsuarios.data = data.value;
       else
         this._utilidadServicio.mostrarAlerta("No se encontraron datos", "Oops!");
     },
@@ -77,24 +72,20 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataListaUsuarios.paginator = this.paginacionTabla; //Creamos la paginación a la tabla
+    this.dataListaUsuarios.paginator = this.paginacionTabla;
   }
 
-  //Metodo para los filtros de la tabla cuando realizamos una búsqueda
   aplicarFiltroTabla(event: Event){
-    const filterValue = (event.target as HTMLInputElement).value; //Obtenemos el valor del input
-    this.dataListaUsuarios.filter = filterValue.trim().toLowerCase(); //Aplicamos el filtro a la tabla
-    //trim() elimina los espacios en blanco
-    //toLowerCase() convierte todo a minúsculas
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataListaUsuarios.filter = filterValue.trim().toLowerCase();
   }
 
-  //Abrir el modal cuando el usuario da click para crear un nuevo usuario
   nuevoUsuario(){
     this.dialog.open(ModalUsuarioComponent, {
-      disableClose: true, //No se puede cerrar el modal dando click fuera de él
+      disableClose: true,
     }).afterClosed().subscribe(resultado => {
       if(resultado === "true"){
-        this.obtenerUsuarios(); //Actualizo la lista
+        this.obtenerUsuarios();
       }
     });
   }
@@ -102,10 +93,10 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
   editarUsuario(usuario: Usuario){
     this.dialog.open(ModalUsuarioComponent, {
       disableClose: true,
-      data: usuario //Pasamos la información del usuario al modal
+      data: usuario
     }).afterClosed().subscribe(resultado => {
       if(resultado === "true"){
-        this.obtenerUsuarios(); //Actualizo la lista
+        this.obtenerUsuarios();
       }
     });
   }
@@ -126,7 +117,7 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
           next: (data) => {
             if(data.status){
               this._utilidadServicio.mostrarAlerta("Usuario eliminado con éxito", "Listo!");
-              this.obtenerUsuarios(); //Actualizo la lista
+              this.obtenerUsuarios();
             }else{
               this._utilidadServicio.mostrarAlerta("No se pudo eliminar el usuario", "Error");
             }
