@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 //Solicitudes HTTP
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'; //Esto nos permite poder recibir las respuestas de las APIs
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments'
 import { ResponseApi } from '../Interfaces/response-api'; 
 import { Producto } from '../Interfaces/producto';
@@ -17,7 +17,7 @@ export class ProductoService {
   constructor(private http:HttpClient){}
 
   lista():Observable<ResponseApi>{
-      return this.http.get<ResponseApi>(`${this.urlApi}Lista`) //Esto tiene que coincidir con el nombre del método en el controlador de la API en Swagger
+      return this.http.get<ResponseApi>(`${this.urlApi}Lista`)
   }
   
   guardar(request:Producto):Observable<ResponseApi>{
