@@ -15,7 +15,6 @@ export class MenuService {
 
   constructor(private http:HttpClient){}
 
-  //Lista de Menus
   lista(idUsuario: number):Observable<ResponseApi>{
     return this.http.get<ResponseApi>(`${this.urlApi}Lista?idUsuario=${idUsuario}`) //Le pasamos el id del usuario que está en el localStorage
   }
