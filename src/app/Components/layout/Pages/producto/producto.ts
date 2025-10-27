@@ -1,8 +1,6 @@
-// src/app/Components/layout/Pages/usuario/usuario.ts
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Material & CDK
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,13 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 
-// Servicios / componentes
 import { ModalProductoComponent } from '../../Modales/modal-producto/modal-producto';
 import { Producto } from '../../../../Interfaces/producto';
 import { ProductoService } from '../../../../Services/producto';
 import { UtilidadService } from '../../../../Reutilizable/utilidad';
 
-// Utiles
 import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from "@angular/forms";
@@ -43,11 +39,10 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class ProductoComponent implements OnInit, AfterViewInit{
 
-  //Variables de columnas para las tablas
     columnasTabla : string[] = ['nombre', 'categoria', 'stock', 'precio', 'estado', 'acciones'];
-    dataInicio: Producto[] = []; //Array que va a contener la información de los usuarios. Por defecto es un array vacío
-    dataListaProductos = new MatTableDataSource(this.dataInicio); //Fuente de datos para la tabla
-    @ViewChild(MatPaginator) paginacionTabla!: MatPaginator; //Variable para la paginación de la tabla. "!" omite valores nulos
+    dataInicio: Producto[] = [];
+    dataListaProductos = new MatTableDataSource(this.dataInicio);
+    @ViewChild(MatPaginator) paginacionTabla!: MatPaginator;
 
   constructor(
       private dialog: MatDialog,
@@ -59,7 +54,7 @@ export class ProductoComponent implements OnInit, AfterViewInit{
       this._productoServicio.lista().subscribe({
         next: (data) => {
           if(data.status)
-            this.dataListaProductos.data = data.value; //Asignamos la información a la fuente de datos de la tabla
+            this.dataListaProductos.data = data.value;
           else
             this._utilidadServicio.mostrarAlerta("No se encontraron datos", "Oops!");
         },
@@ -74,20 +69,20 @@ export class ProductoComponent implements OnInit, AfterViewInit{
     }
 
     ngAfterViewInit(): void {
-      this.dataListaProductos.paginator = this.paginacionTabla; //Creamos la paginación a la tabla
+      this.dataListaProductos.paginator = this.paginacionTabla;
     }
 
     aplicarFiltroTabla(event: Event){
-      const filterValue = (event.target as HTMLInputElement).value; //Obtenemos el valor del input
-      this.dataListaProductos.filter = filterValue.trim().toLowerCase(); //Aplicamos el filtro a la tabla
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataListaProductos.filter = filterValue.trim().toLowerCase();
     }
 
     nuevoProducto(){
         this.dialog.open(ModalProductoComponent, {
-          disableClose: true, //No se puede cerrar el modal dando click fuera de él
+          disableClose: true,
         }).afterClosed().subscribe(resultado => {
           if(resultado === "true"){
-            this.obtenerProductos(); //Actualizo la lista
+            this.obtenerProductos();
           }
         });
       }
@@ -95,10 +90,10 @@ export class ProductoComponent implements OnInit, AfterViewInit{
     editarProducto(producto: Producto){
         this.dialog.open(ModalProductoComponent, {
           disableClose: true,
-          data: producto //Pasamos la información del producto al modal
+          data: producto
         }).afterClosed().subscribe(resultado => {
           if(resultado === "true"){
-            this.obtenerProductos(); //Actualizo la lista
+            this.obtenerProductos();
           }
      });
     }
@@ -119,7 +114,7 @@ export class ProductoComponent implements OnInit, AfterViewInit{
               next: (data) => {
                 if(data.status){
                   this._utilidadServicio.mostrarAlerta("El producto fue eliminado", "Listo!");
-                  this.obtenerProductos(); //Actualizo la lista
+                  this.obtenerProductos();
                 }else{
                   this._utilidadServicio.mostrarAlerta("No se pudo eliminar el producto", "Error");
                 }
